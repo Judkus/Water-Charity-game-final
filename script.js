@@ -6,6 +6,15 @@ let score = 0; // Player's score
 let timeLeft = 30; // 30-second timer
 const feedback = document.getElementById("feedback-message");
 
+// --- Difficulty settings ---
+const difficultySettings = {
+  easy:    { winScore: 12, time: 40, dropInterval: 1200, badDropChance: 0.15, obstacleChance: 0.18 },
+  normal:  { winScore: 20, time: 30, dropInterval: 1000, badDropChance: 0.25, obstacleChance: 0.35 },
+  hard:    { winScore: 28, time: 20, dropInterval: 700,  badDropChance: 0.33, obstacleChance: 0.5  }
+};
+let currentDifficulty = 'normal';
+let currentSettings = difficultySettings[currentDifficulty];
+
 const winMessages = [
   "Amazing! You brought clean water to the village!",
   "You did it! The community celebrates your effort!",
@@ -20,6 +29,14 @@ const loseMessages = [
 // Wait for button click to start the game
 document.getElementById("start-btn").addEventListener("click", startGame);
 document.getElementById("reset-btn").addEventListener("click", resetGame);
+const difficultySelect = document.getElementById("difficulty");
+difficultySelect.addEventListener("change", function() {
+  currentDifficulty = difficultySelect.value;
+  currentSettings = difficultySettings[currentDifficulty];
+  document.querySelector('.game-tagline').textContent =
+    `Catch ${currentSettings.winScore} good drops to win, avoid the bad ones!`;
+  resetGame();
+});
 
 function startGame() {
   // Prevent multiple games from running at once
@@ -30,7 +47,7 @@ function startGame() {
 
   gameRunning = true;
   score = 0;
-  timeLeft = 30;
+  timeLeft = currentSettings.time;
   document.getElementById("score").textContent = score;
   document.getElementById("time").textContent = timeLeft;
   feedback.style.display = "none";
@@ -39,8 +56,8 @@ function startGame() {
   // Start drop and obstacle creation only when game starts
   dropMaker = setInterval(() => {
     createDrop();
-    if (Math.random() < 0.35) createObstacle();
-  }, 1000);
+    if (Math.random() < currentSettings.obstacleChance) createObstacle();
+  }, currentSettings.dropInterval);
   // Start the timer countdown
   timerInterval = setInterval(updateTimer, 1000);
 }
@@ -61,12 +78,12 @@ function endGame() {
   const container = document.getElementById("game-container");
   container.innerHTML = "";
   // Show feedback message
-  let messageArr = score >= 20 ? winMessages : loseMessages;
+  let messageArr = score >= currentSettings.winScore ? winMessages : loseMessages;
   let msg = messageArr[Math.floor(Math.random() * messageArr.length)];
   feedback.textContent = msg + ` (Final Score: ${score})`;
   feedback.style.display = "block";
   updateScoreDisplay();
-  if (score >= 20) {
+  if (score >= currentSettings.winScore) {
     showConfetti();
     feedback.style.transition = "opacity 0.5s";
     feedback.style.opacity = 1;
@@ -82,7 +99,7 @@ function resetGame() {
   clearInterval(dropMaker);
   clearInterval(timerInterval);
   score = 0;
-  timeLeft = 30;
+  timeLeft = currentSettings.time;
   document.getElementById("score").textContent = score;
   document.getElementById("time").textContent = timeLeft;
   document.getElementById("game-container").innerHTML = "";
@@ -107,7 +124,7 @@ function createDrop() {
   const drop = document.createElement("div");
 
   // Randomly decide if this is a good drop or a bad drop (dirty water)
-  const isBadDrop = Math.random() < 0.25; // 25% chance for a bad drop
+  const isBadDrop = Math.random() < currentSettings.badDropChance; // 25% chance for a bad drop
   drop.className = isBadDrop ? "water-drop bad-drop" : "water-drop";
 
   // Make drops different sizes for visual variety

@@ -30,7 +30,7 @@ body {
     align-items: center;
     min-height: 100vh;
     background-color: #e6f7ff; /* charity: water light blue */
-    font-family: 'Avenir', 'Proxima Nova', Arial, sans-serif;
+    font-family: 'Montserrat', 'Avenir', 'Proxima Nova', Arial, sans-serif;
 }
 
 .game-wrapper {
@@ -97,28 +97,51 @@ body {
 
 .water-drop {
     position: absolute;
-    width: 60px;  /* increased from 40px */
-    height: 60px; /* increased from 40px */
-    background-color: #2E9DF7; /* charity: water blue */
+    width: 60px;
+    height: 60px;
+    background: #2E9DF7;
     border: 3px solid #FFC907;
-    border-radius: 50%;
+    border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%; /* raindrop shape */
     animation: dropFall linear forwards;
     transform-origin: center;
     cursor: pointer;
-    padding: 15px;  /* Add padding for larger click area */
-    margin: -15px;  /* Offset padding to maintain visual size */
-    transition: transform 0.1s ease, box-shadow 0.2s ease;  /* Smooth hover effect */
+    padding: 15px;
+    margin: -15px;
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
     box-shadow: 0 2px 8px rgba(46,157,247,0.15);
+    /* Add a highlight for realism */
+    overflow: visible;
 }
-
-.water-drop:hover {
-    transform: scale(1.1);  /* Slight grow effect on hover */
-    box-shadow: 0 4px 16px #FFC907;
+.water-drop::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 18%;
+    width: 16px;
+    height: 22px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%;
+    transform: translate(-50%, -50%) rotate(-18deg) scale(0.35,0.5);
+    pointer-events: none;
 }
-
 .bad-drop {
-    background-color: #F5402C; /* charity: water red */
-    border: 3px solid #FF902A; /* charity: water orange */
+    background: #F5402C;
+    border: 3px solid #FFC907;
+    border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%; /* raindrop shape */
+}
+.bad-drop::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 18%;
+    width: 16px;
+    height: 22px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%;
+    transform: translate(-50%, -50%) rotate(-18deg) scale(0.35,0.5);
+    pointer-events: none;
 }
 
 .game-title {
@@ -149,6 +172,10 @@ body {
     padding: 10px 20px;
     margin: 20px 0;
     box-shadow: 0 2px 4px rgba(46,157,247,0.08);
+}
+
+.game-wrapper, .score-panel, .game-title, .game-subheading, .game-tagline, .timer, .score, #feedback-message, .difficulty-select, button, footer {
+    font-family: 'Montserrat', 'Avenir', 'Proxima Nova', Arial, sans-serif !important;
 }
 
 @keyframes dropFall {

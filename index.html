@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Drop Game</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="game-wrapper">
@@ -16,6 +19,14 @@
         <div class="score-panel">
             <div class="score">Score: <span id="score">0</span></div>
             <div class="timer">Time: <span id="time">30</span>s</div>
+            <div class="difficulty-select">
+                <label for="difficulty" style="font-weight:bold; color:#2E9DF7;">Difficulty:</label>
+                <select id="difficulty" style="font-size:16px; margin-left:6px;">
+                    <option value="easy">Easy</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
             <button id="start-btn">Start Game</button>
             <button id="reset-btn">Reset</button>
         </div>
@@ -27,5 +38,11 @@
     </div>
     
     <script src="script.js"></script>
+    <footer style="position:fixed; left:0; bottom:0; width:100vw; padding:18px 0; background:#f7fafc; border-top:2px solid #FFC907; text-align:center; font-family:'Avenir','Proxima Nova',Arial,sans-serif; font-size:1.1rem; color:#159A48; z-index:100; box-shadow:0 -2px 8px rgba(46,157,247,0.05);">
+      <span>Support clean water for all! </span>
+      <a href="https://www.charitywater.org/" target="_blank" style="color:#2E9DF7; font-weight:bold; text-decoration:none; margin:0 10px;">Visit charity: water</a>
+      <span>|</span>
+      <a href="https://www.charitywater.org/donate" target="_blank" style="color:#FFC907; font-weight:bold; text-decoration:none; margin:0 10px;">Donate</a>
+    </footer>
 </body>
 </html>
