@@ -26,10 +26,11 @@ Fonts:
 
 body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     min-height: 100vh;
-    background-color: #e6f7ff; /* charity: water light blue */
+    background-color: #e6f7ff;
     font-family: 'Montserrat', 'Avenir', 'Proxima Nova', Arial, sans-serif;
 }
 
@@ -38,18 +39,42 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
+}
+
+.score-panel, #game-container, .game-title, .game-subheading, .game-tagline, .timer, .score, #feedback-message, .difficulty-select, button, footer {
+    font-family: 'Montserrat', 'Avenir', 'Proxima Nova', Arial, sans-serif !important;
+}
+
+#game-container {
+    width: 98vw;
+    max-width: 800px;
+    height: 60vw;
+    max-height: 600px;
+    min-height: 320px;
+    background-color: #e6f7ff;
+    border: 2px solid #2E9DF7;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
 }
 
 .score-panel {
     display: flex;
-    justify-content: space-between;  /* Space between score and button */
-    align-items: center;
-    width: 800px;
-    padding: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    width: 98vw;
+    max-width: 800px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(46,157,247,0.08);
     border: 2px solid #FFC907;
+    padding: 10px 18px 14px 18px;
+    margin-bottom: 8px;
+    gap: 0;
 }
 
 .timer {
@@ -58,17 +83,6 @@ body {
     font-size: 24px;
     font-weight: bold;
 }
-
-#game-container {
-    width: 800px;
-    height: 600px;
-    background-color: #e6f7ff;
-    border: 2px solid #2E9DF7;
-    border-radius: 8px;
-    position: relative;
-    overflow: hidden;
-}
-
 
 #start-btn {
     padding: 8px 16px;
@@ -178,6 +192,24 @@ body {
     font-family: 'Montserrat', 'Avenir', 'Proxima Nova', Arial, sans-serif !important;
 }
 
+.score-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 8px;
+}
+
 @keyframes dropFall {
     from {
         transform: translateY(-20px);
@@ -236,6 +268,31 @@ body {
     }
     #feedback-message {
         font-size: 20px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    #game-container {
+        height: 60vw;
+        min-height: 220px;
+        max-height: 400px;
+    }
+    .score-panel {
+        flex-direction: column;
+        align-items: stretch;
+        width: 98vw;
+        max-width: 98vw;
+    }
+    .score-row, .button-row {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+    .game-title, .game-subheading, .game-tagline {
+        font-size: 1.1rem;
+    }
+    #feedback-message {
+        font-size: 1rem !important;
     }
 }
 

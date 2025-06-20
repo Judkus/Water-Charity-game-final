@@ -38,6 +38,39 @@ difficultySelect.addEventListener("change", function() {
   resetGame();
 });
 
+let soundOn = true;
+const soundToggleBtn = document.getElementById("sound-toggle");
+soundToggleBtn.addEventListener("click", function() {
+  soundOn = !soundOn;
+  soundToggleBtn.textContent = soundOn ? "🔊" : "🔇";
+  soundToggleBtn.setAttribute('aria-label', soundOn ? 'Mute sound' : 'Unmute sound');
+});
+
+// Utility to play a sound if enabled
+function playSound(id) {
+  if (!soundOn) return;
+  const audio = document.getElementById(id);
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play();
+  }
+}
+
+// Add audio elements (replace with your actual file names)
+const audioHTML = `
+<audio id="sfx-collect" src="Sounds/collect.mp3" preload="auto"></audio>
+<audio id="sfx-bad" src="Sounds/bad.mp3" preload="auto"></audio>
+<audio id="sfx-win" src="Sounds/win.mp3" preload="auto"></audio>
+<audio id="sfx-lose" src="Sounds/lose.mp3" preload="auto"></audio>
+<audio id="sfx-click" src="Sounds/click.mp3" preload="auto"></audio>
+`;
+document.body.insertAdjacentHTML('beforeend', audioHTML);
+
+// Add sound to button clicks
+["start-btn", "reset-btn"].forEach(id => {
+  document.getElementById(id).addEventListener("click", () => playSound("sfx-click"));
+});
+
 function startGame() {
   // Prevent multiple games from running at once
   if (gameRunning) return;
@@ -60,6 +93,7 @@ function startGame() {
   }, currentSettings.dropInterval);
   // Start the timer countdown
   timerInterval = setInterval(updateTimer, 1000);
+  playSound("sfx-click");
 }
 
 function updateTimer() {
@@ -84,10 +118,12 @@ function endGame() {
   feedback.style.display = "block";
   updateScoreDisplay();
   if (score >= currentSettings.winScore) {
+    playSound("sfx-win");
     showConfetti();
     feedback.style.transition = "opacity 0.5s";
     feedback.style.opacity = 1;
   } else {
+    playSound("sfx-lose");
     // Keep lose message visible until reset as well
     feedback.style.transition = "opacity 0.5s";
     feedback.style.opacity = 1;
@@ -160,6 +196,7 @@ function createDrop() {
   drop.addEventListener("click", function() {
     if (!gameRunning) return;
     if (isBadDrop) {
+      playSound("sfx-bad");
       // Bad drop: subtract 2 points (min 0) and show penalty feedback
       score = Math.max(0, score - 2);
       // Show floating '-2' directly next to the red droplet (to the right)
@@ -190,6 +227,7 @@ function createDrop() {
         minusTwo.remove();
       }, 800);
     } else {
+      playSound("sfx-collect");
       // Good drop: add 1 point and show positive feedback
       score++;
       // Show floating '+1' directly next to the droplet (to the right)
@@ -286,6 +324,7 @@ function createObstacle() {
 
   obstacle.addEventListener("click", function() {
     if (!gameRunning) return;
+    playSound("sfx-bad");
     score = Math.max(0, score - 5);
     feedback.textContent = "Ouch! Obstacle hit. -5 points.";
     feedback.style.color = "#F5402C";
@@ -327,3 +366,34 @@ function showConfetti() {
     confettiContainer.remove();
   }, 1800);
 }
+
+// --- Leaderboard logic ---
+function updateLeaderboard(newScore) {
+  let scores = JSON.parse(localStorage.getItem('cw-leaderboard') || '[]');
+  if (typeof newScore === 'number') {
+    scores.push(newScore);
+    scores = scores.sort((a,b) => b-a).slice(0,5);
+    localStorage.setItem('cw-leaderboard', JSON.stringify(scores));
+  }
+  const list = document.getElementById('leaderboard-list');
+  list.innerHTML = '';
+  scores.forEach((s, i) => {
+    const li = document.createElement('li');
+    li.textContent = `#${i+1}: ${s} points`;
+    list.appendChild(li);
+  });
+  document.getElementById('leaderboard').style.display = scores.length ? 'block' : 'none';
+}
+// Show leaderboard on load
+updateLeaderboard();
+// Update leaderboard on game end
+const origEndGame = endGame;
+endGame = function() {
+  origEndGame.apply(this, arguments);
+  updateLeaderboard(score);
+};
+
+// --- ARIA for screen reader ---
+document.getElementById('score').setAttribute('aria-live','polite');
+document.getElementById('time').setAttribute('aria-live','polite');
+document.getElementById('feedback-message').setAttribute('role','status');
