@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Drop Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <h1 class="game-title">Water Drop</h1>
+        <h2 class="game-subheading" style="color:#159A48; font-size: 1.0rem; font-family: 'Avenir', 'Proxima Nova', Arial, sans-serif; font-weight: 600; margin: 0 0 10px 0; display: flex; align-items: center; gap: 10px; justify-content: center;">
+          <img src="img/water-can.png" alt="Charity Water Jerry Can" style="height: 26px; vertical-align: middle;"> A Charity: water game
+        </h2>
+        <p class="game-tagline">Catch 20 good drops to win, avoid the bad ones!</p>
+        <div class="score-panel">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="timer">Time: <span id="time">30</span>s</div>
+            <button id="start-btn">Start Game</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        
+        <div id="feedback-message" style="display:none; font-size: 28px; font-weight: bold; color: #2E9DF7; margin: 20px 0; text-align: center;"></div>
+        
+        <div id="game-container">
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
