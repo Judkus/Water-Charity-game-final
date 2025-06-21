@@ -56,6 +56,66 @@ function playSound(id) {
   }
 }
 
+// --- Background Music and Nuanced Sound Effects ---
+// Add background music audio element and toggle button if not present
+(function addMusicElements() {
+  if (!document.getElementById('bg-music')) {
+    const music = document.createElement('audio');
+    music.id = 'bg-music';
+    music.src = 'music/bg-music.mp3'; // Place your gentle background music here
+    music.loop = true;
+    music.volume = 0.18;
+    document.body.appendChild(music);
+  }
+  if (!document.getElementById('music-toggle')) {
+    const btn = document.createElement('button');
+    btn.id = 'music-toggle';
+    btn.className = 'music-toggle';
+    btn.textContent = '🎵 Music On';
+    btn.setAttribute('aria-label', 'Toggle background music');
+    document.querySelector('.score-panel').appendChild(btn);
+  }
+})();
+
+let musicOn = true;
+const bgMusic = document.getElementById('bg-music');
+const musicToggleBtn = document.getElementById('music-toggle');
+if (musicToggleBtn) {
+  musicToggleBtn.onclick = function() {
+    musicOn = !musicOn;
+    if (musicOn) {
+      bgMusic.volume = 0.18;
+      bgMusic.play();
+      musicToggleBtn.textContent = '🎵 Music On';
+      musicToggleBtn.classList.add('active');
+    } else {
+      bgMusic.pause();
+      musicToggleBtn.textContent = '🔇 Music Off';
+      musicToggleBtn.classList.remove('active');
+    }
+  };
+}
+// Auto-play music on game start (if not muted)
+const origStartGameMusic = startGame;
+startGame = function() {
+  origStartGameMusic.apply(this, arguments);
+  if (musicOn && bgMusic.paused) {
+    bgMusic.play();
+  }
+};
+// Pause music on game end
+const origEndGameMusic = endGame;
+endGame = function() {
+  origEndGameMusic.apply(this, arguments);
+  if (bgMusic && !musicOn) bgMusic.pause();
+};
+// Pause music on reset
+const origResetGameMusic = resetGame;
+resetGame = function() {
+  origResetGameMusic.apply(this, arguments);
+  if (bgMusic && !musicOn) bgMusic.pause();
+};
+
 // Add audio elements (replace with your actual file names)
 const audioHTML = `
 <audio id="sfx-collect" src="fantasy-game-sword-cut-sound-effect-get-more-on-my-patreon-339824.mp3" preload="auto"></audio>
@@ -68,6 +128,36 @@ const audioHTML = `
 <audio id="sfx-dropmiss" src="drop-sound-effect-240899.mp3" preload="auto"></audio>
 `;
 document.body.insertAdjacentHTML('beforeend', audioHTML);
+
+// --- Nuanced Sound Effects ---
+// Add more nuanced SFX (replace with your own files as needed)
+(function addNuancedSFX() {
+  const sfx = [
+    { id: 'sfx-dropmiss-soft', src: 'Sounds/drop-miss-soft.mp3' },
+    { id: 'sfx-collect-soft', src: 'Sounds/collect-soft.mp3' },
+    { id: 'sfx-bad-soft', src: 'Sounds/bad-soft.mp3' },
+    { id: 'sfx-obstacle', src: 'Sounds/obstacle.mp3' }
+  ];
+  sfx.forEach(({id,src}) => {
+    if (!document.getElementById(id)) {
+      const audio = document.createElement('audio');
+      audio.id = id;
+      audio.src = src;
+      audio.preload = 'auto';
+      document.body.appendChild(audio);
+    }
+  });
+})();
+
+// Use nuanced SFX for different actions
+function playNuancedSound(type) {
+  if (!soundOn) return;
+  const audio = document.getElementById(type);
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play();
+  }
+}
 
 // Add sound to button clicks
 ["start-btn", "reset-btn", "difficulty", "sound-toggle"].forEach(id => {
@@ -307,6 +397,7 @@ function createDrop() {
   drop.addEventListener("animationend", () => {
     if (!isBadDrop && gameRunning) {
       playSound("sfx-dropmiss");
+      playNuancedSound('sfx-dropmiss-soft');
       // Show splash effect for missed good drop
       const rect = drop.getBoundingClientRect();
       const containerRect = document.getElementById('game-container').getBoundingClientRect();
@@ -324,6 +415,7 @@ function createDrop() {
     const splashY = rect.top - containerRect.top + rect.height/2;
     if (isBadDrop) {
       playSound("sfx-bad");
+      playNuancedSound('sfx-bad-soft');
       score = Math.max(0, score - 2);
       // Show floating '-2' directly next to the red droplet (to the right)
       const minusTwo = document.createElement("div");
@@ -355,6 +447,7 @@ function createDrop() {
       showSplashEffect(splashX, splashY, true);
     } else {
       playSound("sfx-collect");
+      playNuancedSound('sfx-collect-soft');
       score++;
       // Show floating '+1' directly next to the droplet (to the right)
       const plusOne = document.createElement("div");
@@ -463,6 +556,7 @@ function createObstacle() {
   obstacle.addEventListener("click", function() {
     if (!gameRunning) return;
     playSound("sfx-bad");
+    playNuancedSound('sfx-obstacle');
     score = Math.max(0, score - 5);
     feedback.textContent = "Ouch! Obstacle hit. -5 points.";
     feedback.style.color = "#F5402C";
