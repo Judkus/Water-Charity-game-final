@@ -63,6 +63,7 @@ const audioHTML = `
 <audio id="sfx-win" src="Sounds/win.mp3" preload="auto"></audio>
 <audio id="sfx-lose" src="Sounds/lose.mp3" preload="auto"></audio>
 <audio id="sfx-click" src="Sounds/click.mp3" preload="auto"></audio>
+<audio id="sfx-gameover" src="game-over-31-179699.mp3" preload="auto"></audio>
 `;
 document.body.insertAdjacentHTML('beforeend', audioHTML);
 
@@ -70,6 +71,14 @@ document.body.insertAdjacentHTML('beforeend', audioHTML);
 ["start-btn", "reset-btn"].forEach(id => {
   document.getElementById(id).addEventListener("click", () => playSound("sfx-click"));
 });
+
+// --- Milestone messages ---
+const milestones = [
+  { score: 5, message: "Great start! Keep going!" },
+  { score: 10, message: "Halfway there!" },
+  { score: 15, message: "So close! Just a few more drops!" }
+];
+let shownMilestones = new Set();
 
 function startGame() {
   // Prevent multiple games from running at once
@@ -94,6 +103,8 @@ function startGame() {
   // Start the timer countdown
   timerInterval = setInterval(updateTimer, 1000);
   playSound("sfx-click");
+
+  shownMilestones.clear();
 }
 
 function updateTimer() {
@@ -117,6 +128,7 @@ function endGame() {
   feedback.textContent = msg + ` (Final Score: ${score})`;
   feedback.style.display = "block";
   updateScoreDisplay();
+  playSound("sfx-gameover");
   if (score >= currentSettings.winScore) {
     playSound("sfx-win");
     showConfetti();
@@ -142,6 +154,8 @@ function resetGame() {
   feedback.style.display = "none";
   feedback.textContent = "";
   feedback.style.opacity = 1;
+
+  shownMilestones.clear();
 }
 
 function updateScoreDisplay() {
@@ -259,6 +273,16 @@ function createDrop() {
         plusOne.remove();
       }, 800);
     }
+    // Milestone check
+    milestones.forEach(m => {
+      if (score === m.score && !shownMilestones.has(m.score)) {
+        feedback.textContent = m.message;
+        feedback.style.display = "block";
+        feedback.style.color = "#4FCB53";
+        setTimeout(() => { feedback.style.display = "none"; }, 1200);
+        shownMilestones.add(m.score);
+      }
+    });
     updateScoreDisplay();
     drop.remove(); // Remove drop when clicked
   });
@@ -369,20 +393,21 @@ function showConfetti() {
 
 // --- Leaderboard logic ---
 function updateLeaderboard(newScore) {
-  let scores = JSON.parse(localStorage.getItem('cw-leaderboard') || '[]');
-  if (typeof newScore === 'number') {
-    scores.push(newScore);
-    scores = scores.sort((a,b) => b-a).slice(0,5);
-    localStorage.setItem('cw-leaderboard', JSON.stringify(scores));
+  let highScore = Number(localStorage.getItem('cw-highscore') || '0');
+  if (typeof newScore === 'number' && newScore > highScore) {
+    highScore = newScore;
+    localStorage.setItem('cw-highscore', String(highScore));
   }
   const list = document.getElementById('leaderboard-list');
   list.innerHTML = '';
-  scores.forEach((s, i) => {
+  if (highScore > 0) {
     const li = document.createElement('li');
-    li.textContent = `#${i+1}: ${s} points`;
+    li.textContent = `🏆 High Score: ${highScore} points`;
     list.appendChild(li);
-  });
-  document.getElementById('leaderboard').style.display = scores.length ? 'block' : 'none';
+    document.getElementById('leaderboard').style.display = 'block';
+  } else {
+    document.getElementById('leaderboard').style.display = 'none';
+  }
 }
 // Show leaderboard on load
 updateLeaderboard();
