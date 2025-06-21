@@ -85,6 +85,51 @@ const milestones = [
 ];
 let shownMilestones = new Set();
 
+// --- Progress Bar for win condition ---
+// Insert progress bar into the score panel
+(function addProgressBar() {
+  const scorePanel = document.querySelector('.score-panel');
+  if (!document.getElementById('progress-bar-container') && scorePanel) {
+    const bar = document.createElement('div');
+    bar.className = 'progress-bar-container';
+    bar.id = 'progress-bar-container';
+    bar.innerHTML = `<div class="progress-bar" id="progress-bar"></div><span class="progress-bar-label" id="progress-bar-label"></span>`;
+    scorePanel.appendChild(bar);
+  }
+})();
+
+function updateProgressBar() {
+  const bar = document.getElementById('progress-bar');
+  const label = document.getElementById('progress-bar-label');
+  if (!bar || !label) return;
+  const percent = Math.min(100, Math.round((score / currentSettings.winScore) * 100));
+  bar.style.width = percent + '%';
+  label.textContent = `${score} / ${currentSettings.winScore} clean drops`;
+}
+
+// Update progress bar on score change and game start/reset
+document.addEventListener('DOMContentLoaded', updateProgressBar);
+const origUpdateScoreDisplay = updateScoreDisplay;
+updateScoreDisplay = function() {
+  origUpdateScoreDisplay.apply(this, arguments);
+  updateProgressBar();
+};
+const origStartGame = startGame;
+startGame = function() {
+  origStartGame.apply(this, arguments);
+  updateProgressBar();
+};
+const origResetGame = resetGame;
+resetGame = function() {
+  origResetGame.apply(this, arguments);
+  updateProgressBar();
+};
+const origEndGame2 = endGame;
+endGame = function() {
+  origEndGame2.apply(this, arguments);
+  updateProgressBar();
+};
+
 function startGame() {
   // Prevent multiple games from running at once
   if (gameRunning) return;

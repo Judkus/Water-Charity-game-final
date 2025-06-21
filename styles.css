@@ -345,6 +345,39 @@ body {
     }
 }
 
+/* Progress bar for win condition */
+.progress-bar-container {
+    width: 100%;
+    max-width: 420px;
+    height: 18px;
+    background: #e6f7ff;
+    border: 2px solid #2E9DF7;
+    border-radius: 8px;
+    margin: 10px auto 0 auto;
+    box-shadow: 0 1px 4px rgba(46,157,247,0.08);
+    overflow: hidden;
+    position: relative;
+}
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #FFC907 0%, #2E9DF7 100%);
+    border-radius: 8px 0 0 8px;
+    transition: width 0.3s cubic-bezier(.4,1.4,.6,1);
+    width: 0%;
+    box-shadow: 0 0 8px #FFC90744;
+}
+.progress-bar-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 13px;
+    color: #159A48;
+    font-weight: bold;
+    pointer-events: none;
+    text-shadow: 0 1px 2px #fff8;
+}
+
 @media (max-width: 850px) {
     .game-wrapper, .score-panel, #game-container {
         width: 95vw;
