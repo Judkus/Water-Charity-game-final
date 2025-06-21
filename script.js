@@ -184,17 +184,13 @@ let shownMilestones = new Set();
     bar.className = 'progress-bar-container';
     bar.id = 'progress-bar-container';
     bar.innerHTML = `<div class="progress-bar" id="progress-bar"></div><span class="progress-bar-label" id="progress-bar-label"></span>`;
-    scorePanel.appendChild(bar);
-  }
-})();
-
-(function moveProgressBarBelowTheme() {
-  const scorePanel = document.querySelector('.score-panel');
-  const themeToggle = document.getElementById('theme-toggle');
-  const progressBar = document.getElementById('progress-bar-container');
-  if (scorePanel && themeToggle && progressBar) {
-    // Insert progress bar right after the theme toggle
-    themeToggle.insertAdjacentElement('afterend', progressBar);
+    // Place after theme toggle if present, else at end
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.insertAdjacentElement('afterend', bar);
+    } else {
+      scorePanel.appendChild(bar);
+    }
   }
 })();
 
