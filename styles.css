@@ -673,6 +673,25 @@ footer {
     .help-content h2 { font-size: 1.05rem; }
 }
 
+/* Animated Buttons: Pulse and Click Feedback */
+button, .music-toggle, .help-btn {
+    transition: background 0.2s, box-shadow 0.2s, transform 0.13s;
+}
+button:hover, .music-toggle:hover, .help-btn:hover {
+    animation: btnPulse 0.7s cubic-bezier(.4,1.4,.6,1) infinite alternate;
+    box-shadow: 0 4px 16px #2E9DF733, 0 2px 8px #FFC90744;
+    z-index: 2;
+}
+button:active, .music-toggle:active, .help-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 1px 4px #2E9DF733;
+    animation: none;
+}
+@keyframes btnPulse {
+    0% { transform: scale(1); box-shadow: 0 2px 8px #2E9DF733; }
+    100% { transform: scale(1.045); box-shadow: 0 6px 24px #2E9DF744; }
+}
+
 /* Fallback for browsers that don't support custom cursor images */
 @media (pointer: coarse) {
     #game-container, .water-drop, .bad-drop {
