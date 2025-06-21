@@ -593,6 +593,86 @@ footer {
     outline: 2px solid #2E9DF7;
 }
 
+/* Help Button and Modal Styles */
+.help-btn {
+    background: #2E9DF7;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(46,157,247,0.08);
+    transition: background 0.2s;
+    vertical-align: middle;
+}
+.help-btn:focus {
+    outline: 2px solid #FFC907;
+}
+.help-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(46,157,247,0.18);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s;
+}
+.help-modal.show {
+    display: flex;
+    opacity: 1;
+    pointer-events: all;
+}
+.help-content {
+    background: #fff;
+    border: 3px solid #FFC907;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(46,157,247,0.13);
+    padding: 28px 22px 18px 22px;
+    max-width: 340px;
+    width: 90vw;
+    text-align: left;
+    position: relative;
+    font-size: 1.08rem;
+}
+#close-help-modal {
+    position: absolute;
+    top: 8px; right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #2E9DF7;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 0;
+}
+#close-help-modal:focus {
+    outline: 2px solid #FFC907;
+}
+.help-content h2 {
+    color: #2E9DF7;
+    margin-top: 0;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+.help-content ul {
+    margin: 0 0 0 18px;
+    padding: 0;
+    font-size: 1.05em;
+}
+.help-content li {
+    margin-bottom: 7px;
+    line-height: 1.4;
+}
+@media (max-width: 500px) {
+    .help-content { padding: 12px 4vw 12px 4vw; font-size: 0.98rem; }
+    .help-content h2 { font-size: 1.05rem; }
+}
+
 /* Fallback for browsers that don't support custom cursor images */
 @media (pointer: coarse) {
     #game-container, .water-drop, .bad-drop {

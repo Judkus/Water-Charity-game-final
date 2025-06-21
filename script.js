@@ -62,7 +62,7 @@ function playSound(id) {
   if (!document.getElementById('bg-music')) {
     const music = document.createElement('audio');
     music.id = 'bg-music';
-    music.src = 'music/bg-music.mp3'; // Place your gentle background music here
+    music.src = 'soft-piano-100-bpm-121529.mp3'; // Place your gentle background music here
     music.loop = true;
     music.volume = 0.18;
     document.body.appendChild(music);
@@ -658,3 +658,55 @@ function showSparkleParticles(x, y) {
     setTimeout(() => sparkle.remove(), 700);
   }
 }
+
+// --- Soft Piano Music ---
+(function addSoftPianoMusic() {
+  const existing = document.getElementById('bg-music');
+  if (existing) {
+    existing.src = 'soft-piano-100-bpm-121529.mp3';
+    existing.load();
+  }
+})();
+
+// --- Help Button and Accessibility Guide ---
+(function addHelpButton() {
+  if (!document.getElementById('help-btn')) {
+    const btn = document.createElement('button');
+    btn.id = 'help-btn';
+    btn.className = 'help-btn';
+    btn.setAttribute('aria-label', 'Show help and tips');
+    btn.innerHTML = '❓';
+    document.querySelector('.score-panel').appendChild(btn);
+  }
+})();
+
+(function addHelpModal() {
+  if (!document.getElementById('help-modal')) {
+    const modal = document.createElement('div');
+    modal.id = 'help-modal';
+    modal.className = 'help-modal';
+    modal.innerHTML = `
+      <div class="help-content">
+        <button id="close-help-modal" aria-label="Close help">×</button>
+        <h2>How to Play</h2>
+        <ul>
+          <li>💧 <b>Catch clean water drops</b> by clicking or tapping them before they fall!</li>
+          <li>🚫 <b>Avoid red (dirty) drops</b> and obstacles—they subtract points.</li>
+          <li>🪣 <b>Bonus:</b> Click the water can for extra points!</li>
+          <li>🎵 <b>Toggle music/sound</b> with the speaker and music buttons.</li>
+          <li>🏆 <b>Reach the target score</b> before time runs out to win!</li>
+          <li>📱 <b>Tip:</b> Works on mobile—just tap the drops!</li>
+        </ul>
+        <p style="margin-top:10px;font-size:0.98em;color:#2E9DF7;">Good luck, and thank you for playing to support clean water!</p>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+})();
+
+document.getElementById('help-btn').onclick = function() {
+  document.getElementById('help-modal').classList.add('show');
+};
+document.getElementById('close-help-modal').onclick = function() {
+  document.getElementById('help-modal').classList.remove('show');
+};
