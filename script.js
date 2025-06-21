@@ -188,6 +188,16 @@ let shownMilestones = new Set();
   }
 })();
 
+(function moveProgressBarBelowTheme() {
+  const scorePanel = document.querySelector('.score-panel');
+  const themeToggle = document.getElementById('theme-toggle');
+  const progressBar = document.getElementById('progress-bar-container');
+  if (scorePanel && themeToggle && progressBar) {
+    // Insert progress bar right after the theme toggle
+    themeToggle.insertAdjacentElement('afterend', progressBar);
+  }
+})();
+
 function updateProgressBar() {
   const bar = document.getElementById('progress-bar');
   const label = document.getElementById('progress-bar-label');
@@ -360,6 +370,38 @@ function updateScoreDisplay() {
     scoreElem.style.color = "#131313"; // revert to default
   }, 300);
 }
+
+// --- Seasonal Theme Toggle ---
+(function addThemeToggle() {
+  if (!document.getElementById('theme-toggle')) {
+    const select = document.createElement('select');
+    select.id = 'theme-toggle';
+    select.className = 'theme-toggle';
+    select.setAttribute('aria-label', 'Select visual theme');
+    select.innerHTML = `
+      <option value="summer">☀️ Summer</option>
+      <option value="winter">❄️ Winter</option>
+      <option value="night">🌙 Night</option>
+    `;
+    document.querySelector('.score-panel').appendChild(select);
+  }
+})();
+
+const themeSelect = document.getElementById('theme-toggle');
+function setTheme(theme) {
+  document.body.classList.remove('theme-summer', 'theme-winter', 'theme-night');
+  document.body.classList.add('theme-' + theme);
+  localStorage.setItem('cw-theme', theme);
+}
+themeSelect.addEventListener('change', function() {
+  setTheme(this.value);
+});
+// On load, set theme from localStorage or default to summer
+(function initTheme() {
+  const saved = localStorage.getItem('cw-theme') || 'summer';
+  themeSelect.value = saved;
+  setTheme(saved);
+})();
 
 function createDrop() {
   // Create a new div element that will be our water drop
