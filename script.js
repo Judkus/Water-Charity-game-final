@@ -379,7 +379,13 @@ function updateScoreDisplay() {
       <option value="winter">❄️ Winter</option>
       <option value="night">🌙 Night</option>
     `;
-    document.querySelector('.score-panel').appendChild(select);
+    // Insert after music toggle if present, else at end
+    const musicToggle = document.getElementById('music-toggle');
+    if (musicToggle) {
+      musicToggle.insertAdjacentElement('afterend', select);
+    } else {
+      document.querySelector('.score-panel').appendChild(select);
+    }
   }
 })();
 
