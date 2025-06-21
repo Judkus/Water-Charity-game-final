@@ -777,6 +777,7 @@ function showSparkleParticles(x, y) {
         <ul>
           <li>💧 <b>Catch clean water drops</b> by clicking or tapping them before they fall!</li>
           <li>🚫 <b>Avoid red (dirty) drops</b> and obstacles—they subtract points.</li>
+          <li>⏰ <b>Click falling clocks</b> for <b>+5s</b> bonus time on the countdown!</li>
           <li>🪣 <b>Bonus:</b> Click the water can for extra points!</li>
           <li>🎵 <b>Toggle music/sound</b> with the speaker and music buttons.</li>
           <li>🏆 <b>Reach the target score</b> before time runs out to win!</li>
