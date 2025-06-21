@@ -199,6 +199,51 @@ function endGame() {
   }
 }
 
+// --- Themed Win/Lose Overlay ---
+function showEndOverlay(type, score) {
+  // Remove any existing overlay
+  const old = document.getElementById('end-overlay');
+  if (old) old.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'end-overlay';
+  overlay.className = 'end-overlay ' + type;
+  overlay.innerHTML = `
+    <div class="end-modal">
+      <img src="img/${type === 'win' ? 'cw_logo-horizontal.png' : 'cw_logo.png'}" alt="${type === 'win' ? 'Charity: water logo' : 'Game Over'}" class="end-illustration">
+      <h2>${type === 'win' ? 'You Win! 💧' : 'Game Over'}</h2>
+      <p class="end-message">${type === 'win' ? 'You brought clean water to the village!<br>Final Score: ' + score : 'Better luck next time!<br>Final Score: ' + score}</p>
+      <button id="close-end-overlay">Close</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  setTimeout(() => overlay.classList.add('show'), 10);
+  document.getElementById('close-end-overlay').onclick = () => overlay.remove();
+}
+
+// Patch endGame to show overlay
+const origEndGameOverlay = endGame;
+endGame = function() {
+  origEndGameOverlay.apply(this, arguments);
+  if (score >= currentSettings.winScore) {
+    showEndOverlay('win', score);
+  } else {
+    showEndOverlay('lose', score);
+  }
+};
+// Remove overlay on game start/reset
+const origStartGameOverlay = startGame;
+startGame = function() {
+  origStartGameOverlay.apply(this, arguments);
+  const old = document.getElementById('end-overlay');
+  if (old) old.remove();
+};
+const origResetGameOverlay = resetGame;
+resetGame = function() {
+  origResetGameOverlay.apply(this, arguments);
+  const old = document.getElementById('end-overlay');
+  if (old) old.remove();
+};
+
 function resetGame() {
   gameRunning = false;
   clearInterval(dropMaker);
