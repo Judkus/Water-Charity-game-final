@@ -573,6 +573,47 @@ function createDrop() {
   }, 2500);
 }
 
+// --- Add Timer Bonus Clock Drop ---
+function createTimerBonus() {
+  const clock = document.createElement('div');
+  clock.className = 'timer-bonus';
+  clock.title = '+5s!';
+  // Random size and position
+  const size = 44 + Math.random() * 12;
+  clock.style.width = clock.style.height = `${size}px`;
+  const gameWidth = document.getElementById('game-container').offsetWidth;
+  const xPosition = Math.random() * (gameWidth - size);
+  clock.style.left = xPosition + 'px';
+  clock.style.top = '0px';
+  clock.style.position = 'absolute';
+  clock.style.zIndex = 20;
+  clock.style.animation = 'dropFall 4s linear forwards';
+  clock.innerHTML = '<svg width="100%" height="100%" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#fff" stroke="#2E9DF7" stroke-width="4"/><path d="M24 14v10l7 4" stroke="#2E9DF7" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="24" r="18" stroke="#FFC907" stroke-width="2" fill="none"/></svg>';
+  document.getElementById('game-container').appendChild(clock);
+  // Remove if not clicked
+  clock.addEventListener('animationend', () => clock.remove());
+  // Click event: add +5s
+  clock.addEventListener('click', function() {
+    if (!gameRunning) return;
+    timeLeft += 5;
+    document.getElementById('time').textContent = timeLeft;
+    feedback.textContent = '+5s! Bonus time!';
+    feedback.style.color = '#2E9DF7';
+    feedback.style.display = 'block';
+    setTimeout(() => { feedback.style.display = 'none'; }, 900);
+    playSound('sfx-click');
+    clock.remove();
+  });
+}
+// Randomly spawn timer bonus (clock) with low chance each drop interval
+const origCreateDropWithBonus = createDrop;
+createDrop = function() {
+  origCreateDropWithBonus.apply(this, arguments);
+  if (gameRunning && Math.random() < 0.13) { // ~13% chance per drop
+    createTimerBonus();
+  }
+};
+
 function createObstacle() {
   const obstacle = document.createElement("div");
   obstacle.className = "obstacle";
