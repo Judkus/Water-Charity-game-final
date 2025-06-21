@@ -78,10 +78,33 @@ body {
     gap: 0;
 }
 
-.timer {
+.timer, .score {
     flex: 0 1 auto;
-    color: #2E9DF7; /* charity: water blue */
-    font-size: 24px;
+    color: #159A48; /* charity: water dark green */
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #FFC907;
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin: 2px 0;
+    display: inline-block;
+    min-width: 110px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(46,157,247,0.08);
+    border: none;
+}
+
+.timer {
+    color: #2E9DF7;
+    margin-bottom: 4px;
+}
+
+.score {
+    color: #159A48;
+    margin-top: 4px;
+}
+
+.timer span, .score span {
     font-weight: bold;
 }
 
@@ -101,13 +124,6 @@ body {
 
 #start-btn:hover {
     background-color: #FF902A; /* charity: water orange */
-}
-
-.score {
-    flex: 0 1 auto;
-    color: #159A48; /* charity: water dark green */
-    font-size: 24px;
-    font-weight: bold;
 }
 
 .water-drop {
