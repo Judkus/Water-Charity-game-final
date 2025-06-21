@@ -130,7 +130,8 @@ body {
     position: absolute;
     width: 60px;
     height: 60px;
-    background: #2E9DF7;
+    background: radial-gradient(ellipse at 60% 30%, #fff 18%, transparent 40%),
+                linear-gradient(180deg, #2E9DF7 60%, #159A48 100%);
     border: 3px solid #FFC907;
     border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%; /* raindrop shape */
     animation: dropFall linear forwards;
@@ -140,39 +141,40 @@ body {
     margin: -15px;
     transition: transform 0.1s ease, box-shadow 0.2s ease;
     box-shadow: 0 2px 8px rgba(46,157,247,0.15);
-    /* Add a highlight for realism */
     overflow: visible;
 }
 .water-drop::after {
     content: '';
     display: block;
     position: absolute;
-    left: 50%;
-    top: 18%;
-    width: 16px;
-    height: 22px;
-    background: rgba(255,255,255,0.7);
+    left: 55%;
+    top: 22%;
+    width: 14px;
+    height: 20px;
+    background: rgba(255,255,255,0.8);
     border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%;
-    transform: translate(-50%, -50%) rotate(-18deg) scale(0.35,0.5);
+    transform: translate(-50%, -50%) rotate(-18deg) scale(0.32,0.48);
     pointer-events: none;
+    filter: blur(0.5px);
 }
 .bad-drop {
-    background: #F5402C;
+    background: linear-gradient(180deg, #F5402C 70%, #8BD1CB 100%);
     border: 3px solid #FFC907;
-    border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%; /* raindrop shape */
+    border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%;
 }
 .bad-drop::after {
     content: '';
     display: block;
     position: absolute;
-    left: 50%;
-    top: 18%;
-    width: 16px;
-    height: 22px;
+    left: 55%;
+    top: 22%;
+    width: 14px;
+    height: 20px;
     background: rgba(255,255,255,0.5);
     border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%;
-    transform: translate(-50%, -50%) rotate(-18deg) scale(0.35,0.5);
+    transform: translate(-50%, -50%) rotate(-18deg) scale(0.32,0.48);
     pointer-events: none;
+    filter: blur(0.5px);
 }
 
 .game-title {
