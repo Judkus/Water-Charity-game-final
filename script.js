@@ -217,16 +217,23 @@ function createDrop() {
   drop.addEventListener("animationend", () => {
     if (!isBadDrop && gameRunning) {
       playSound("sfx-dropmiss");
+      // Show splash effect for missed good drop
+      const rect = drop.getBoundingClientRect();
+      const containerRect = document.getElementById('game-container').getBoundingClientRect();
+      showSplashEffect(rect.left - containerRect.left + rect.width/2, containerRect.height - 30, false);
     }
-    drop.remove(); // Clean up drops that weren't caught
+    drop.remove();
   });
 
   // Add click event to handle good/bad drop
   drop.addEventListener("click", function() {
     if (!gameRunning) return;
+    const rect = drop.getBoundingClientRect();
+    const containerRect = document.getElementById('game-container').getBoundingClientRect();
+    const splashX = rect.left - containerRect.left + rect.width/2;
+    const splashY = rect.top - containerRect.top + rect.height/2;
     if (isBadDrop) {
       playSound("sfx-bad");
-      // Bad drop: subtract 2 points (min 0) and show penalty feedback
       score = Math.max(0, score - 2);
       // Show floating '-2' directly next to the red droplet (to the right)
       const minusTwo = document.createElement("div");
@@ -255,9 +262,9 @@ function createDrop() {
       setTimeout(() => {
         minusTwo.remove();
       }, 800);
+      showSplashEffect(splashX, splashY, true);
     } else {
       playSound("sfx-collect");
-      // Good drop: add 1 point and show positive feedback
       score++;
       // Show floating '+1' directly next to the droplet (to the right)
       const plusOne = document.createElement("div");
@@ -287,6 +294,8 @@ function createDrop() {
       setTimeout(() => {
         plusOne.remove();
       }, 800);
+      showSplashEffect(splashX, splashY, false);
+      showSparkleParticles(splashX, splashY); // Add sparkles for good drop
     }
     // Milestone check
     milestones.forEach(m => {
@@ -374,6 +383,16 @@ function createObstacle() {
   });
 }
 
+// --- Splash/ripple effect ---
+function showSplashEffect(x, y, isBad = false) {
+  const splash = document.createElement('div');
+  splash.className = 'splash-effect' + (isBad ? ' bad' : '');
+  splash.style.left = x + 'px';
+  splash.style.top = y + 'px';
+  document.getElementById('game-container').appendChild(splash);
+  setTimeout(() => splash.remove(), 700); // Remove after animation
+}
+
 // --- New confetti function ---
 function showConfetti() {
   // Simple confetti effect using emoji
@@ -437,3 +456,21 @@ endGame = function() {
 document.getElementById('score').setAttribute('aria-live','polite');
 document.getElementById('time').setAttribute('aria-live','polite');
 document.getElementById('feedback-message').setAttribute('role','status');
+
+// --- Sparkle/Bubble particle effect for good drops ---
+function showSparkleParticles(x, y) {
+  const container = document.getElementById('game-container');
+  for (let i = 0; i < 7; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle-particle';
+    // Randomize angle and distance
+    const angle = Math.random() * 2 * Math.PI;
+    const distance = 18 + Math.random() * 18;
+    const offsetX = Math.cos(angle) * distance;
+    const offsetY = Math.sin(angle) * distance;
+    sparkle.style.left = (x + offsetX - 8) + 'px';
+    sparkle.style.top = (y + offsetY - 8) + 'px';
+    container.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 700);
+  }
+}

@@ -30,8 +30,37 @@ body {
     justify-content: flex-start;
     align-items: center;
     min-height: 100vh;
-    background-color: #e6f7ff;
+    background: linear-gradient(180deg, #e6f7ff 0%, #8BD1CB 100%);
     font-family: 'Montserrat', 'Avenir', 'Proxima Nova', Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+.animated-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.cloud {
+    position: absolute;
+    top: 0;
+    width: 180px;
+    height: 60px;
+    background: #fff;
+    border-radius: 50% 50% 60% 60% / 60% 60% 100% 100%;
+    opacity: 0.7;
+    filter: blur(1px);
+    animation: cloudMove 38s linear infinite;
+}
+.cloud.c2 { left: 30vw; top: 12vh; width: 120px; height: 40px; opacity: 0.5; animation-duration: 50s; }
+.cloud.c3 { left: 60vw; top: 22vh; width: 140px; height: 48px; opacity: 0.6; animation-duration: 44s; }
+.cloud.c4 { left: 80vw; top: 6vh; width: 100px; height: 32px; opacity: 0.4; animation-duration: 60s; }
+
+@keyframes cloudMove {
+    0% { left: -200px; }
+    100% { left: 110vw; }
 }
 
 .game-wrapper {
@@ -61,6 +90,7 @@ body {
     overflow: visible; /* Show the full border, no clipping */
     margin-bottom: 110px; /* Increase space for the footer */
     box-shadow: 0 0 0 6px #FFC907, 0 4px 24px rgba(46,157,247,0.10); /* Add yellow outer frame and subtle shadow */
+    cursor: url('img/water-can.png') 16 16, pointer;
 }
 
 .score-panel {
@@ -136,7 +166,7 @@ body {
     border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%; /* raindrop shape */
     animation: dropFall linear forwards;
     transform-origin: center;
-    cursor: pointer;
+    cursor: url('img/water-can.png') 16 16, pointer;
     padding: 15px;
     margin: -15px;
     transition: transform 0.1s ease, box-shadow 0.2s ease;
@@ -161,6 +191,7 @@ body {
     background: linear-gradient(180deg, #F5402C 70%, #8BD1CB 100%);
     border: 3px solid #FFC907;
     border-radius: 60% 60% 80% 80% / 60% 60% 100% 100%;
+    cursor: url('img/water-can.png') 16 16, pointer;
 }
 .bad-drop::after {
     content: '';
@@ -249,6 +280,69 @@ body {
 
 .obstacle {
     display: none !important;
+}
+
+/* Splash/Ripple effect for droplet collection or miss */
+.splash-effect {
+    position: absolute;
+    pointer-events: none;
+    width: 60px;
+    height: 60px;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,157,247,0.25) 40%, rgba(46,157,247,0.10) 70%, transparent 100%);
+    border: 2px solid #2E9DF7;
+    opacity: 0.7;
+    transform: scale(0.5);
+    animation: splashExpand 0.45s cubic-bezier(0.4,0.7,0.5,1) forwards;
+    z-index: 10;
+}
+.splash-effect.bad {
+    background: radial-gradient(circle, rgba(245,64,44,0.22) 40%, rgba(245,64,44,0.10) 70%, transparent 100%);
+    border-color: #F5402C;
+}
+@keyframes splashExpand {
+    0% {
+        opacity: 0.7;
+        transform: scale(0.5);
+    }
+    70% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.7);
+    }
+}
+
+/* Sparkle/Bubble particle effect for good drop collection */
+.sparkle-particle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff 60%, #2E9DF7 100%);
+    opacity: 0.85;
+    animation: sparklePop 0.7s cubic-bezier(0.4,0.7,0.5,1) forwards;
+    z-index: 20;
+    box-shadow: 0 0 8px 2px #fff8, 0 0 2px 0 #2E9DF7;
+}
+@keyframes sparklePop {
+    0% {
+        opacity: 0.9;
+        transform: scale(0.5) translateY(0);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.2) translateY(-12px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.7) translateY(-28px);
+    }
 }
 
 @media (max-width: 850px) {
@@ -359,4 +453,11 @@ footer {
     color: #159A48;
     z-index: 100;
     box-shadow: 0 -2px 8px rgba(46,157,247,0.05);
+}
+
+/* Fallback for browsers that don't support custom cursor images */
+@media (pointer: coarse) {
+    #game-container, .water-drop, .bad-drop {
+        cursor: pointer;
+    }
 }
