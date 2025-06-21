@@ -18,20 +18,27 @@
         <p class="game-tagline">Catch 20 good drops to win, avoid the bad ones!</p>
         <div class="score-panel">
             <div class="score-row" style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:center; width:100%;">
-                <div class="score">Score: <span id="score">0</span></div>
-                <div class="timer">Time: <span id="time">30</span>s</div>
-                <div class="difficulty-select">
-                    <label for="difficulty" style="font-weight:bold; color:#2E9DF7;">Difficulty:</label>
-                    <select id="difficulty" style="font-size:16px; margin-left:6px;">
-                        <option value="easy">Easy</option>
-                        <option value="normal" selected>Normal</option>
-                        <option value="hard">Hard</option>
-                    </select>
+                <div style="display:flex; flex-direction:column; align-items:flex-start; gap:6px;">
+                  <button id="start-btn">Start Game</button>
+                  <button id="reset-btn">Reset</button>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <div class="timer">Time: <span id="time">30</span>s</div>
+                  <div class="score">Score: <span id="score">0</span></div>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <div class="difficulty-select">
+                      <label for="difficulty" style="font-weight:bold; color:#2E9DF7;">Difficulty:</label>
+                      <select id="difficulty" style="font-size:16px; margin-left:6px;">
+                          <option value="easy">Easy</option>
+                          <option value="normal" selected>Normal</option>
+                          <option value="hard">Hard</option>
+                      </select>
+                  </div>
+                  <button id="sound-toggle" aria-label="Toggle sound" style="background:#2E9DF7; color:#fff; border:none; border-radius:4px; padding:8px 14px; font-size:16px; cursor:pointer;">🔊</button>
                 </div>
             </div>
             <div class="button-row" style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; align-items:center; width:100%; margin-top:8px;">
-                <button id="start-btn">Start Game</button>
-                <button id="reset-btn">Reset</button>
                 <button id="sound-toggle" aria-label="Toggle sound" style="background:#2E9DF7; color:#fff; border:none; border-radius:4px; padding:8px 14px; font-size:16px; cursor:pointer;">🔊</button>
             </div>
         </div>

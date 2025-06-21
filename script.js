@@ -58,18 +58,23 @@ function playSound(id) {
 
 // Add audio elements (replace with your actual file names)
 const audioHTML = `
-<audio id="sfx-collect" src="Sounds/collect.mp3" preload="auto"></audio>
+<audio id="sfx-collect" src="fantasy-game-sword-cut-sound-effect-get-more-on-my-patreon-339824.mp3" preload="auto"></audio>
 <audio id="sfx-bad" src="Sounds/bad.mp3" preload="auto"></audio>
 <audio id="sfx-win" src="Sounds/win.mp3" preload="auto"></audio>
 <audio id="sfx-lose" src="Sounds/lose.mp3" preload="auto"></audio>
-<audio id="sfx-click" src="Sounds/click.mp3" preload="auto"></audio>
+<audio id="sfx-click" src="button-202966.mp3" preload="auto"></audio>
 <audio id="sfx-gameover" src="game-over-31-179699.mp3" preload="auto"></audio>
+<audio id="sfx-gewonnen" src="gewonnen-87838.mp3" preload="auto"></audio>
+<audio id="sfx-dropmiss" src="drop-sound-effect-240899.mp3" preload="auto"></audio>
 `;
 document.body.insertAdjacentHTML('beforeend', audioHTML);
 
 // Add sound to button clicks
-["start-btn", "reset-btn"].forEach(id => {
-  document.getElementById(id).addEventListener("click", () => playSound("sfx-click"));
+["start-btn", "reset-btn", "difficulty", "sound-toggle"].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener("click", () => playSound("sfx-click"));
+  }
 });
 
 // --- Milestone messages ---
@@ -119,22 +124,29 @@ function endGame() {
   gameRunning = false;
   clearInterval(dropMaker);
   clearInterval(timerInterval);
-  // Remove all drops and obstacles from the game container
   const container = document.getElementById("game-container");
   container.innerHTML = "";
-  // Show feedback message
-  let messageArr = score >= currentSettings.winScore ? winMessages : loseMessages;
-  let msg = messageArr[Math.floor(Math.random() * messageArr.length)];
-  feedback.textContent = msg + ` (Final Score: ${score})`;
-  feedback.style.display = "block";
-  updateScoreDisplay();
-  playSound("sfx-gameover");
   if (score >= currentSettings.winScore) {
-    playSound("sfx-win");
+    // Stop all other sounds, then play celebration song
+    ["sfx-win", "sfx-lose", "sfx-bad", "sfx-collect", "sfx-gameover"].forEach(id => {
+      const a = document.getElementById(id);
+      if (a) { a.pause(); a.currentTime = 0; }
+    });
+    const gewonnen = document.getElementById("sfx-gewonnen");
+    if (gewonnen) {
+      gewonnen.currentTime = 0;
+      gewonnen.play();
+    }
+    let messageArr = winMessages;
+    let msg = messageArr[Math.floor(Math.random() * messageArr.length)];
+    feedback.textContent = msg + ` (Final Score: ${score})`;
+    feedback.style.display = "block";
+    updateScoreDisplay();
     showConfetti();
     feedback.style.transition = "opacity 0.5s";
     feedback.style.opacity = 1;
   } else {
+    playSound("sfx-gameover");
     playSound("sfx-lose");
     // Keep lose message visible until reset as well
     feedback.style.transition = "opacity 0.5s";
@@ -203,6 +215,9 @@ function createDrop() {
 
   // Remove drops that reach the bottom (weren't clicked)
   drop.addEventListener("animationend", () => {
+    if (!isBadDrop && gameRunning) {
+      playSound("sfx-dropmiss");
+    }
     drop.remove(); // Clean up drops that weren't caught
   });
 

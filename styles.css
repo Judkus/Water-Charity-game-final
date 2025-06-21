@@ -55,11 +55,12 @@ body {
     max-height: 600px;
     min-height: 320px;
     background-color: #e6f7ff;
-    border: 2px solid #2E9DF7;
-    border-radius: 8px;
+    border: 4px solid #2E9DF7; /* Thicker, more visible border */
+    border-radius: 18px; /* More rounded corners for visibility */
     position: relative;
-    overflow: hidden;
-    margin-bottom: 16px;
+    overflow: visible; /* Show the full border, no clipping */
+    margin-bottom: 110px; /* Increase space for the footer */
+    box-shadow: 0 0 0 6px #FFC907, 0 4px 24px rgba(46,157,247,0.10); /* Add yellow outer frame and subtle shadow */
 }
 
 .score-panel {
@@ -229,19 +230,7 @@ body {
 }
 
 .obstacle {
-    background: #F16061 url('img/cw_logo.png') center/contain no-repeat;
-    border: 3px solid #F5402C;
-    border-radius: 50%;
-    position: absolute;
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(245,64,44,0.15);
-    cursor: pointer;
-    animation: obstacleFall 3.5s linear forwards;
-    transition: transform 0.1s;
-}
-.obstacle:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 16px #F5402C;
+    display: none !important;
 }
 
 @media (max-width: 850px) {
@@ -276,6 +265,7 @@ body {
         height: 60vw;
         min-height: 220px;
         max-height: 400px;
+        margin-bottom: 140px;
     }
     .score-panel {
         flex-direction: column;
@@ -293,6 +283,10 @@ body {
     }
     #feedback-message {
         font-size: 1rem !important;
+    }
+    footer {
+        font-size: 1rem;
+        padding: 12px 0;
     }
 }
 
@@ -331,4 +325,20 @@ body {
         width: 28px !important;
         height: 28px !important;
     }
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    padding: 18px 0;
+    background: #f7fafc;
+    border-top: 2px solid #FFC907;
+    text-align: center;
+    font-family: 'Avenir','Proxima Nova',Arial,sans-serif;
+    font-size: 1.1rem;
+    color: #159A48;
+    z-index: 100;
+    box-shadow: 0 -2px 8px rgba(46,157,247,0.05);
 }
